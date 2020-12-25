@@ -30,10 +30,10 @@ export const draw = (
 	};
 
     return {
-        at: (x: number, y: number) => {
-            prop.pos = {x, y};
-            return draw(img, ctx, prop);
-        },
+		at: (x: number, y: number) => {
+			prop.pos = {x, y};
+			return draw(img, ctx, prop);
+		},
         rotated: (a: number) => {
             prop.rot = a;
             return draw(img, ctx, prop);
