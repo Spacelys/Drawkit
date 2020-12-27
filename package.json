@@ -1,11 +1,11 @@
 {
   "name": "@spacelys/drawkit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Library for rendering 2d elements onto a canvas",
   "main": "dist/index.js",
-  "types" : "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
-	"build": "tsc",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Spacelys/Drawkit/issues"
   },
-  "homepage": "https://github.com/Spacelys/Drawkit#readme"
+  "homepage": "https://github.com/Spacelys/Drawkit#readme",
+  "devDependencies": {
+    "typescript": "4.1.3"
+  }
 }

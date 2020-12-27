@@ -7,6 +7,7 @@ export interface ICanvasBuilder {
 	draw: (img: HTMLImageElement) => CanvasBuilderImage;
 	text: (msg: string) => CanvasBuilderText;
 	primitive: () => CanvasBuilderPrimitive;
+	clear: () => void;
 };
 
 export {loadImage} from './ext';
@@ -27,6 +28,9 @@ export const CanvasBuilder = (selector: any): ICanvasBuilder => {
         },
         primitive: () => {
             return primitive(ctx, canvas.width, canvas.height);
-        }
+		},
+		clear: () => {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+		},
     };
 };
