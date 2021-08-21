@@ -13,5 +13,5 @@ steps:
   args: ['run', 'lint']
 artifacts:
   objects:
-    location: 'gs://spacelys/randish/outputs/$SHORT_SHA/'
+    location: 'gs://spacelys/drawkit/outputs/$SHORT_SHA/'
     paths: ['coverage/**.*', 'package.json']
