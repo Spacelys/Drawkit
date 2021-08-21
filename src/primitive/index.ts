@@ -9,20 +9,18 @@ export interface CanvasBuilderPrimitive {
 	line: () => CanvasBuilderPrimitiveLine;
 	circle: () => CanvasBuilderPrimitiveCircle;
 	polygon: () => CanvasBuilderPrimitivePolygon;
-};
+}
 
 export const primitive = (
-		ctx: CanvasRenderingContext2D,
-		width: number,
-		height: number
-	): CanvasBuilderPrimitive => {
-	return {
-		clear: () => {
-			ctx.clearRect(0, 0, width, height);
-		},
-		rect: () => rect(ctx),
-		line: () => line(ctx),
-		circle: () => circle(ctx),
-		polygon: () => polygon(ctx)
-	};
-};
+	ctx: CanvasRenderingContext2D,
+	width: number,
+	height: number
+): CanvasBuilderPrimitive => ({
+	clear: () => {
+		ctx.clearRect(0, 0, width, height);
+	},
+	rect: () => rect(ctx),
+	line: () => line(ctx),
+	circle: () => circle(ctx),
+	polygon: () => polygon(ctx),
+});

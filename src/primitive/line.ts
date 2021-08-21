@@ -4,16 +4,36 @@ export interface CanvasBuilderPrimitiveLine {
 	shift: (x: number, y: number) => CanvasBuilderPrimitiveLine;
 	start: (x: number, y: number) => CanvasBuilderPrimitiveLine;
 	end: (x: number, y: number) => CanvasBuilderPrimitiveLine;
-	go: () => void;
-};
+	render: () => void;
+}
 
-export const line = (ctx: CanvasRenderingContext2D, props: any = null): CanvasBuilderPrimitiveLine => {
+export interface LineProps {
+	color: string;
+	start: {
+		x: number;
+		y: number;
+	};
+	end: {
+		x: number;
+		y: number;
+	};
+	offset: {
+		x: number;
+		y: number;
+	};
+	width: number;
+}
+
+export const line = (
+	ctx: CanvasRenderingContext2D,
+	props: LineProps = undefined
+): CanvasBuilderPrimitiveLine => {
 	const prop = props || {
 		color: 'black',
 		start: {x: 0, y: 0},
 		end: {x: 32, y: 32},
 		offset: {x: 0, y: 0},
-		width: 1
+		width: 1,
 	};
 
 	return {
@@ -37,13 +57,13 @@ export const line = (ctx: CanvasRenderingContext2D, props: any = null): CanvasBu
 			prop.end = {x, y};
 			return line(ctx, prop);
 		},
-		go: () => {
-			ctx.lineWidth=prop.width;
-			ctx.strokeStyle=prop.color;
+		render: () => {
+			ctx.lineWidth = prop.width;
+			ctx.strokeStyle = prop.color;
 			ctx.beginPath();
-			ctx.moveTo(prop.start.x+prop.offset.x, prop.start.y+prop.offset.y);
-			ctx.lineTo(prop.end.x+prop.offset.x, prop.end.y+prop.offset.y);
+			ctx.moveTo(prop.start.x + prop.offset.x, prop.start.y + prop.offset.y);
+			ctx.lineTo(prop.end.x + prop.offset.x, prop.end.y + prop.offset.y);
 			ctx.stroke();
-		}
+		},
 	};
-}
+};
