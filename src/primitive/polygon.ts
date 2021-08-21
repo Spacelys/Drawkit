@@ -1,4 +1,4 @@
-import {util} from "../util";
+import {util} from '../util';
 
 export interface CanvasBuilderPrimitivePolygon {
 	at: (x: number, y: number) => CanvasBuilderPrimitivePolygon;
@@ -6,21 +6,47 @@ export interface CanvasBuilderPrimitivePolygon {
 	filled: (fill: boolean) => CanvasBuilderPrimitivePolygon;
 	color: (color: string) => CanvasBuilderPrimitivePolygon;
 	border: (n: number) => CanvasBuilderPrimitivePolygon;
-	vertices: (verts: Array<{x: number, y: number}>) => CanvasBuilderPrimitivePolygon;
-	go: () => void;
-};
+	vertices: (verts: Array<{x: number; y: number}>) => CanvasBuilderPrimitivePolygon;
+	render: () => void;
+}
 
-export const polygon = (ctx: CanvasRenderingContext2D, props: any = null): CanvasBuilderPrimitivePolygon => {
+export interface PolygonProps {
+	strokeColor: string;
+	fillColor: string;
+	lineWidth: number;
+	vertices: Array<{x: number; y: number}>;
+	border: number;
+	filled: boolean;
+	pos: {
+		x: number;
+		y: number;
+	};
+	rot: number;
+	scale: {
+		x: number;
+		y: number;
+	};
+	shift: {
+		x: number;
+		y: number;
+	};
+}
+
+export const polygon = (
+	ctx: CanvasRenderingContext2D,
+	props: PolygonProps = undefined
+): CanvasBuilderPrimitivePolygon => {
 	const prop = props || {
 		strokeColor: 'black',
 		fillColor: util.color.random(),
+		lineWidth: 1,
 		vertices: [],
 		border: 1,
 		filled: true,
 		pos: {x: 0, y: 0},
 		rot: 0,
 		scale: {x: 1, y: 1},
-		shift: {x: 0, y: 0}
+		shift: {x: 0, y: 0},
 	};
 
 	return {
@@ -44,16 +70,16 @@ export const polygon = (ctx: CanvasRenderingContext2D, props: any = null): Canva
 			prop.border = n;
 			return polygon(ctx, prop);
 		},
-		vertices: (verts: Array<{x: number, y: number}>) => {
+		vertices: (verts: Array<{x: number; y: number}>) => {
 			prop.vertices = verts;
 			return polygon(ctx, prop);
 		},
-		go: () => {
-			if(prop.vertices.length < 1) {
-				throw("A polygon must have at least one vertices/point defined.");
+		render: () => {
+			if (prop.vertices.length < 1) {
+				throw new Error('A polygon must have at least one vertices/point defined.');
 			} else {
-				ctx.lineWidth=prop.width;
-				ctx.strokeStyle=prop.strokeColor;
+				ctx.lineWidth = prop.lineWidth;
+				ctx.strokeStyle = prop.strokeColor;
 
 				ctx.translate(prop.pos.x, prop.pos.y); // translated
 				ctx.rotate(prop.rot * Math.PI / 180); // rotation about the origin
@@ -63,21 +89,21 @@ export const polygon = (ctx: CanvasRenderingContext2D, props: any = null): Canva
 
 				ctx.beginPath();
 				ctx.moveTo(prop.vertices[0].x, prop.vertices[0].y);
-				for(let i=1; i < prop.vertices.length; i++) {
+				for (let i = 1; i < prop.vertices.length; i++) {
 					const v = prop.vertices[i];
 					ctx.lineTo(v.x, v.y);
 				}
 				ctx.closePath();
-				if(prop.filled) {
+				if (prop.filled) {
 					ctx.fillStyle = prop.fillColor;
 					ctx.fill();
 				}
-				if(prop.border > 0) {
+				if (prop.border > 0) {
 					ctx.stroke();
 				}
 
 				ctx.setTransform(1, 0, 0, 1, 0, 0); // back to the identity
 			}
-		}
+		},
 	};
 };

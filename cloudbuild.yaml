@@ -1,0 +1,17 @@
+steps:
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+# Unit Test
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'test']
+# coverage
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'coverage']
+# Lint Check
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'lint']
+artifacts:
+  objects:
+    location: 'gs://spacelys/drawkit/outputs/$SHORT_SHA/'
+    paths: ['coverage/**.*', 'package.json']
