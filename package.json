@@ -10,7 +10,8 @@
   "scripts": {
     "build": "tsc",
 	"test": "jest",
-    "lint": "eslint -c .eslintrc.js --ext .ts './src/**/*.ts'"
+    "lint": "eslint -c .eslintrc.js --ext .ts './src/**/*.ts'",
+    "coverage": "npm run test -- --coverage"
   },
   "repository": {
     "type": "git",
