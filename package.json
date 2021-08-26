@@ -1,6 +1,6 @@
 {
   "name": "@spacelys/drawkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Library for rendering 2d elements onto a canvas",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
