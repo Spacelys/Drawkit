@@ -44,7 +44,8 @@ export interface SpriteProps {
 export const draw = (
 	img: HTMLImageElement,
 	ctx: CanvasRenderingContext2D,
-	props: SpriteProps = undefined
+	props: SpriteProps = undefined,
+	identity: () => void,
 ): CanvasBuilderImage => {
 	const prop = props || {
 		pos: {x: 0, y: 0},
@@ -65,39 +66,39 @@ export const draw = (
 	return {
 		at: (x: number, y: number) => {
 			prop.pos = {x, y};
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		rotated: (a: number) => {
 			prop.rot = a;
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		scaled: (x: number, y: number) => {
 			prop.scale = {x, y};
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		sized: (w: number, h: number) => {
 			prop.size.w = w;
 			prop.size.h = h;
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		flipped: (x?: boolean, y?: boolean) => {
 			prop.flipped.x = !!x;
 			prop.flipped.y = !!y;
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		shifted: (x: number, y: number) => {
 			prop.shift = {x, y};
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		visible: (val: boolean) => {
 			prop.visible = val;
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		part: (x: number, y: number, w: number, h: number) => {
 			prop.part = {x, y, w, h};
 			prop.size.w = w;
 			prop.size.h = h;
-			return draw(img, ctx, prop);
+			return draw(img, ctx, prop, identity);
 		},
 		render: () => {
 			const {flipped, scale, size} = prop;
@@ -113,7 +114,7 @@ export const draw = (
 				ctx.drawImage(img, prop.part.x, prop.part.y, prop.part.w, prop.part.h,
 					flipped.x ? -size.w : 0, flipped.y ? -size.h : 0, size.w, size.h);
 
-				ctx.setTransform(1, 0, 0, 1, 0, 0); // back to the identity
+				identity(); // back to the identity
 			}
 		},
 	};
