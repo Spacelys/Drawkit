@@ -30,7 +30,8 @@ export interface CircleProps {
 
 export const circle = (
 	ctx: CanvasRenderingContext2D,
-	props: CircleProps = undefined
+	props: CircleProps = undefined,
+	identity: () => void,
 ): CanvasBuilderPrimitiveCircle => {
 	const prop = props || {
 		color: util.color.random(),
@@ -44,27 +45,27 @@ export const circle = (
 	return {
 		color: (color: string) => {
 			prop.color = color;
-			return circle(ctx, prop);
+			return circle(ctx, prop, identity);
 		},
 		border: (n: number) => {
 			prop.border = n;
-			return circle(ctx, prop);
+			return circle(ctx, prop, identity);
 		},
 		at: (x: number, y: number) => {
 			prop.pos = {x, y};
-			return circle(ctx, prop);
+			return circle(ctx, prop, identity);
 		},
 		shifted: (dx: number, dy: number) => {
 			prop.shift = {dx, dy};
-			return circle(ctx, prop);
+			return circle(ctx, prop, identity);
 		},
 		radius: (r: number) => {
 			prop.radius = r;
-			return circle(ctx, prop);
+			return circle(ctx, prop, identity);
 		},
 		scale: (sx: number, sy: number) => {
 			prop.scale = {sx, sy};
-			return circle(ctx, prop);
+			return circle(ctx, prop, identity);
 		},
 		render: () => {
 			ctx.beginPath();
@@ -84,7 +85,7 @@ export const circle = (
 				ctx.closePath();
 			}
 
-			ctx.setTransform(1, 0, 0, 1, 0, 0); // back to the identity
+			identity(); // back to the identity
 		},
 	};
 };

@@ -34,7 +34,8 @@ export interface PolygonProps {
 
 export const polygon = (
 	ctx: CanvasRenderingContext2D,
-	props: PolygonProps = undefined
+	props: PolygonProps = undefined,
+	identity: () => void,
 ): CanvasBuilderPrimitivePolygon => {
 	const prop = props || {
 		strokeColor: 'black',
@@ -52,27 +53,27 @@ export const polygon = (
 	return {
 		at: (x: number, y: number) => {
 			prop.pos = {x, y};
-			return polygon(ctx, prop);
+			return polygon(ctx, prop, identity);
 		},
 		rotated: (angle: number) => {
 			prop.rot = angle;
-			return polygon(ctx, prop);
+			return polygon(ctx, prop, identity);
 		},
 		filled: (fill: boolean) => {
 			prop.filled = fill;
-			return polygon(ctx, prop);
+			return polygon(ctx, prop, identity);
 		},
 		color: (color: string) => {
 			prop.fillColor = color;
-			return polygon(ctx, prop);
+			return polygon(ctx, prop, identity);
 		},
 		border: (n: number) => {
 			prop.border = n;
-			return polygon(ctx, prop);
+			return polygon(ctx, prop, identity);
 		},
 		vertices: (verts: Array<{x: number; y: number}>) => {
 			prop.vertices = verts;
-			return polygon(ctx, prop);
+			return polygon(ctx, prop, identity);
 		},
 		render: () => {
 			if (prop.vertices.length < 1) {
@@ -102,7 +103,7 @@ export const polygon = (
 					ctx.stroke();
 				}
 
-				ctx.setTransform(1, 0, 0, 1, 0, 0); // back to the identity
+				identity(); // back to the identity
 			}
 		},
 	};

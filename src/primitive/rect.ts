@@ -1,4 +1,4 @@
-import {util} from '../util';
+import { util } from '../util';
 
 export interface CanvasBuilderPrimitiveRect {
 	color: (color: string) => CanvasBuilderPrimitiveRect;
@@ -33,13 +33,14 @@ export interface RectProps {
 	filled: boolean;
 }
 
-export const rect = (ctx: CanvasRenderingContext2D, props: RectProps = undefined): CanvasBuilderPrimitiveRect => {
+export const rect = (ctx: CanvasRenderingContext2D, props: RectProps = undefined, identity: () => void,
+): CanvasBuilderPrimitiveRect => {
 	const prop = props || {
 		color: util.color.random(),
-		pos: {x: 0, y: 0},
-		size: {w: 32, h: 32},
-		scale: {sx: 1, sy: 1},
-		shift: {dx: 0, dy: 0},
+		pos: { x: 0, y: 0 },
+		size: { w: 32, h: 32 },
+		scale: { sx: 1, sy: 1 },
+		shift: { dx: 0, dy: 0 },
 		border: 0,
 		filled: true,
 	};
@@ -47,31 +48,31 @@ export const rect = (ctx: CanvasRenderingContext2D, props: RectProps = undefined
 	return {
 		color: (color: string) => {
 			prop.color = color;
-			return rect(ctx, prop);
+			return rect(ctx, prop, identity);
 		},
 		filled: (fill: boolean) => {
 			prop.filled = fill;
-			return rect(ctx, prop);
+			return rect(ctx, prop, identity);
 		},
 		border: (size: number) => {
 			prop.border = size;
-			return rect(ctx, prop);
+			return rect(ctx, prop, identity);
 		},
 		at: (x: number, y: number) => {
-			prop.pos = {x, y};
-			return rect(ctx, prop);
+			prop.pos = { x, y };
+			return rect(ctx, prop, identity);
 		},
 		shifted: (dx: number, dy: number) => {
-			prop.shift = {dx, dy};
-			return rect(ctx, prop);
+			prop.shift = { dx, dy };
+			return rect(ctx, prop, identity);
 		},
 		size: (w: number, h: number) => {
-			prop.size = {w, h};
-			return rect(ctx, prop);
+			prop.size = { w, h };
+			return rect(ctx, prop, identity);
 		},
 		scale: (sx: number, sy: number) => {
-			prop.scale = {sx, sy};
-			return rect(ctx, prop);
+			prop.scale = { sx, sy };
+			return rect(ctx, prop, identity);
 		},
 		render: () => {
 			ctx.fillStyle = prop.color;
@@ -91,7 +92,7 @@ export const rect = (ctx: CanvasRenderingContext2D, props: RectProps = undefined
 				ctx.closePath();
 			}
 
-			ctx.setTransform(1, 0, 0, 1, 0, 0); // back to the identity
+			identity(); // back to the identity
 		},
 	};
 };

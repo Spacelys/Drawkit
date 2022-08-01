@@ -14,13 +14,14 @@ export interface CanvasBuilderPrimitive {
 export const primitive = (
 	ctx: CanvasRenderingContext2D,
 	width: number,
-	height: number
+	height: number,
+	identity: () => void,
 ): CanvasBuilderPrimitive => ({
 	clear: () => {
 		ctx.clearRect(0, 0, width, height);
 	},
-	rect: () => rect(ctx),
-	line: () => line(ctx),
-	circle: () => circle(ctx),
-	polygon: () => polygon(ctx),
+	rect: () => rect(ctx, undefined, identity),
+	line: () => line(ctx, undefined, identity),
+	circle: () => circle(ctx, undefined, identity),
+	polygon: () => polygon(ctx, undefined, identity),
 });

@@ -26,7 +26,8 @@ export interface LineProps {
 
 export const line = (
 	ctx: CanvasRenderingContext2D,
-	props: LineProps = undefined
+	props: LineProps = undefined,
+	identity: () => void,
 ): CanvasBuilderPrimitiveLine => {
 	const prop = props || {
 		color: 'black',
@@ -39,23 +40,23 @@ export const line = (
 	return {
 		color: (color: string) => {
 			prop.color = color;
-			return line(ctx, prop);
+			return line(ctx, prop, identity);
 		},
 		width: (n: number) => {
 			prop.width = n;
-			return line(ctx, prop);
+			return line(ctx, prop, identity);
 		},
 		shift: (x: number, y: number) => {
 			prop.offset = {x, y};
-			return line(ctx, prop);
+			return line(ctx, prop, identity);
 		},
 		start: (x: number, y: number) => {
 			prop.start = {x, y};
-			return line(ctx, prop);
+			return line(ctx, prop, identity);
 		},
 		end: (x: number, y: number) => {
 			prop.end = {x, y};
-			return line(ctx, prop);
+			return line(ctx, prop, identity);
 		},
 		render: () => {
 			ctx.lineWidth = prop.width;
