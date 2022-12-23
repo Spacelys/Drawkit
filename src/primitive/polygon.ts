@@ -67,8 +67,11 @@ export const polygon = (
 			prop.fillColor = color;
 			return polygon(ctx, prop, identity);
 		},
-		border: (n: number) => {
+		border: (n: number, color?: string) => {
 			prop.border = n;
+			if (color) {
+				prop.strokeColor = color;
+			}
 			return polygon(ctx, prop, identity);
 		},
 		vertices: (verts: Array<{x: number; y: number}>) => {
