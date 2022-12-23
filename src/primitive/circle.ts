@@ -26,6 +26,7 @@ export interface CircleProps {
 		dy: number;
 	};
 	border: number;
+	borderColor: string;
 }
 
 export const circle = (
@@ -40,6 +41,7 @@ export const circle = (
 		scale: {sx: 1, sy: 1},
 		shift: {dx: 0, dy: 0},
 		border: 0,
+		borderColor: 'black',
 	};
 
 	return {
@@ -47,8 +49,11 @@ export const circle = (
 			prop.color = color;
 			return circle(ctx, prop, identity);
 		},
-		border: (n: number) => {
+		border: (n: number, color?: string) => {
 			prop.border = n;
+			if (color) {
+				prop.borderColor = color;
+			}
 			return circle(ctx, prop, identity);
 		},
 		at: (x: number, y: number) => {
@@ -79,7 +84,7 @@ export const circle = (
 			if (prop.border > 0) {
 				ctx.lineWidth = prop.border;
 				ctx.beginPath();
-				ctx.strokeStyle = 'black';
+				ctx.strokeStyle = prop.borderColor;
 				ctx.arc(prop.pos.x, prop.pos.y, prop.radius, 0, 2 * Math.PI);
 				ctx.stroke();
 				ctx.closePath();
