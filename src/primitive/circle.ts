@@ -2,7 +2,7 @@ import {util} from '../util';
 
 export interface CanvasBuilderPrimitiveCircle {
 	color: (color: string) => CanvasBuilderPrimitiveCircle;
-	border: (n: number) => CanvasBuilderPrimitiveCircle;
+	border: (n: number, color?: string) => CanvasBuilderPrimitiveCircle;
 	at: (x: number, y: number) => CanvasBuilderPrimitiveCircle;
 	shifted: (dx: number, dy: number) => CanvasBuilderPrimitiveCircle;
 	radius: (size: number) => CanvasBuilderPrimitiveCircle;

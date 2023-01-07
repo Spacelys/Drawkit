@@ -5,7 +5,7 @@ export interface CanvasBuilderPrimitivePolygon {
 	rotated: (angle: number) => CanvasBuilderPrimitivePolygon;
 	filled: (fill: boolean) => CanvasBuilderPrimitivePolygon;
 	color: (color: string) => CanvasBuilderPrimitivePolygon;
-	border: (n: number) => CanvasBuilderPrimitivePolygon;
+	border: (n: number, color?: string) => CanvasBuilderPrimitivePolygon;
 	vertices: (verts: Array<{x: number; y: number}>) => CanvasBuilderPrimitivePolygon;
 	render: () => void;
 }

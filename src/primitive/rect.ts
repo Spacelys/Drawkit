@@ -3,7 +3,7 @@ import { util } from '../util';
 export interface CanvasBuilderPrimitiveRect {
 	color: (color: string) => CanvasBuilderPrimitiveRect;
 	filled: (fill: boolean) => CanvasBuilderPrimitiveRect;
-	border: (size: number) => CanvasBuilderPrimitiveRect;
+	border: (size: number, color?: string) => CanvasBuilderPrimitiveRect;
 	at: (x: number, y: number) => CanvasBuilderPrimitiveRect;
 	shifted: (dx: number, dy: number) => CanvasBuilderPrimitiveRect;
 	size: (w: number, h: number) => CanvasBuilderPrimitiveRect;
