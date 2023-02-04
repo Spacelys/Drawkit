@@ -1,6 +1,10 @@
+import { CanvasBuilderImageTileset, tileset } from './sprite/tileset';
+
 export interface CanvasBuilderImage {
+	tileset: () => CanvasBuilderImageTileset;
 	at: (x: number, y: number) => CanvasBuilderImage;
 	rotated: (angle: number) => CanvasBuilderImage;
+	alpha: (alpha: number) => CanvasBuilderImage;
 	scaled: (x: number, y: number) => CanvasBuilderImage;
 	shifted: (x: number, y: number) => CanvasBuilderImage;
 	visible: (val: boolean) => CanvasBuilderImage;
@@ -11,6 +15,7 @@ export interface CanvasBuilderImage {
 }
 
 export interface SpriteProps {
+	alpha: number;
 	pos: {
 		x: number;
 		y: number;
@@ -48,6 +53,7 @@ export const draw = (
 	identity: () => void,
 ): CanvasBuilderImage => {
 	const prop = props || {
+		alpha: 1,
 		pos: {x: 0, y: 0},
 		rot: 0,
 		shift: {x: 0, y: 0},
@@ -64,12 +70,17 @@ export const draw = (
 	};
 
 	return {
+		tileset: () => tileset(img, ctx, undefined, identity),
 		at: (x: number, y: number) => {
 			prop.pos = {x, y};
 			return draw(img, ctx, prop, identity);
 		},
 		rotated: (a: number) => {
 			prop.rot = a;
+			return draw(img, ctx, prop, identity);
+		},
+		alpha: (a: number) => {
+			prop.alpha = a;
 			return draw(img, ctx, prop, identity);
 		},
 		scaled: (x: number, y: number) => {
@@ -101,7 +112,7 @@ export const draw = (
 			return draw(img, ctx, prop, identity);
 		},
 		render: () => {
-			const {flipped, scale, size} = prop;
+			const {flipped, scale, size, alpha} = prop;
 			if (prop.visible) {
 				ctx.translate(prop.pos.x, prop.pos.y); // translated
 				ctx.rotate(prop.rot * Math.PI / 180); // rotation about the origin
@@ -111,8 +122,10 @@ export const draw = (
 					flipped.y ? -scale.y : scale.y
 				);
 
+				ctx.globalAlpha = alpha;
 				ctx.drawImage(img, prop.part.x, prop.part.y, prop.part.w, prop.part.h,
 					flipped.x ? -size.w : 0, flipped.y ? -size.h : 0, size.w, size.h);
+				ctx.globalAlpha = 1;
 
 				identity(); // back to the identity
 			}

@@ -1,21 +1,23 @@
-import {draw, CanvasBuilderImage} from './sprite';
-import {primitive, CanvasBuilderPrimitive} from './primitive';
-import {text, CanvasBuilderText} from './text';
+import { draw, CanvasBuilderImage } from './sprite';
+import { primitive, CanvasBuilderPrimitive } from './primitive';
+import { text, CanvasBuilderText } from './text';
+import { artist, CanvasBuilderArtist } from './artist';
 
 export interface ICanvasBuilder {
 	parentElem: HTMLElement;
+	artist: (img: HTMLImageElement) => CanvasBuilderArtist;
 	draw: (img: HTMLImageElement) => CanvasBuilderImage;
 	text: (msg: string) => CanvasBuilderText;
 	primitive: () => CanvasBuilderPrimitive;
 	clear: () => void;
 }
 
-export {loadImage} from './ext';
+export { loadImage } from './ext';
 
 interface Options {
-	cartesionMode: boolean;
-	highDpi: boolean;
-	smoothing: boolean;
+	cartesionMode?: boolean;
+	highDpi?: boolean;
+	smoothing?: boolean;
 }
 
 const defaultOptions: Options = {
@@ -63,6 +65,7 @@ export const CanvasBuilder = (selector: string, options = defaultOptions): ICanv
 
 		return {
 			parentElem: elem,
+			artist: (img: HTMLImageElement) => artist(img),
 			draw: (img: HTMLImageElement) => draw(img, ctx, undefined, identity),
 			text: (msg: string) => text(msg, ctx, undefined, identity),
 			primitive: () => primitive(ctx, canvas.width, canvas.height, identity),
@@ -72,7 +75,7 @@ export const CanvasBuilder = (selector: string, options = defaultOptions): ICanv
 		};
 	} else {
 		const ctx = canvas.getContext('2d');
-		ctx.imageSmoothingEnabled = smoothing;
+		ctx.imageSmoothingEnabled = !!smoothing;
 		ctx.globalCompositeOperation = 'source-over'; // default canvas
 		const identity = () => {
 			if (cartesionMode) {
@@ -85,6 +88,7 @@ export const CanvasBuilder = (selector: string, options = defaultOptions): ICanv
 
 		return {
 			parentElem: elem,
+			artist: (img: HTMLImageElement) => artist(img),
 			draw: (img: HTMLImageElement) => draw(img, ctx, undefined, identity),
 			text: (msg: string) => text(msg, ctx, undefined, identity),
 			primitive: () => primitive(ctx, canvas.width, canvas.height, identity),

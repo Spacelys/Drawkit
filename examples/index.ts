@@ -1,6 +1,10 @@
 import * as drawkit from "../src";
 
-const ctx = drawkit.CanvasBuilder("#canvas", true);
+const ctx = drawkit.CanvasBuilder("#canvas", {
+	cartesionMode: false,
+	highDpi: true,
+	smoothing: false
+});
 
 // Utilties
 const loadImage = (url: string): Promise<HTMLImageElement> => {
@@ -47,7 +51,7 @@ ctx.primitive().rect()
 // Basic Sprite
 const drawSprite = async () => {
 	try {
-		const image = await loadImage('./assets/flower.png');
+		const image = await loadImage(require('./assets/flower.png'));
 
 		ctx.draw(image).at(40, 120).flipped(true, true).render();
 	} catch (err) {
@@ -55,4 +59,18 @@ const drawSprite = async () => {
 	}
 };
 
+// Basic Tileset
+const drawTileset = async () => {
+	try {
+		const image = await loadImage(require('./assets/tileset.png'));
+		for(let i = 0; i < 32; i++) {
+			// render first 32 tiles
+			ctx.draw(image).tileset().tileSize(16, 16).scaled(2, 2).render(i, i * 32, 0);
+		}
+	} catch (err) {
+		console.log('Error', err);
+	}
+};
+
 drawSprite();
+drawTileset();
