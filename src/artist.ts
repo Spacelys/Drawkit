@@ -137,4 +137,4 @@ export const artist = (
 			}).sort((a, b) => b.w - a.w);
 		},
 	};
-}
+};
