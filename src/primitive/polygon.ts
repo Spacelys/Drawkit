@@ -1,12 +1,13 @@
-import {util} from '../util';
+import { util } from '../util';
 
 export interface CanvasBuilderPrimitivePolygon {
 	at: (x: number, y: number) => CanvasBuilderPrimitivePolygon;
 	rotated: (angle: number) => CanvasBuilderPrimitivePolygon;
 	filled: (fill: boolean) => CanvasBuilderPrimitivePolygon;
+	regular: (sides: number, size: number) => CanvasBuilderPrimitivePolygon;
 	color: (color: string) => CanvasBuilderPrimitivePolygon;
 	border: (n: number, color?: string) => CanvasBuilderPrimitivePolygon;
-	vertices: (verts: Array<{x: number; y: number}>) => CanvasBuilderPrimitivePolygon;
+	vertices: (verts: Array<{ x: number; y: number }>) => CanvasBuilderPrimitivePolygon;
 	render: () => void;
 }
 
@@ -14,8 +15,7 @@ export interface PolygonProps {
 	strokeColor: string;
 	fillColor: string;
 	lineWidth: number;
-	vertices: Array<{x: number; y: number}>;
-	border: number;
+	vertices: Array<{ x: number; y: number }>;
 	filled: boolean;
 	pos: {
 		x: number;
@@ -42,17 +42,25 @@ export const polygon = (
 		fillColor: util.color.random(),
 		lineWidth: 1,
 		vertices: [],
-		border: 1,
 		filled: true,
-		pos: {x: 0, y: 0},
+		pos: { x: 0, y: 0 },
 		rot: 0,
-		scale: {x: 1, y: 1},
-		shift: {x: 0, y: 0},
+		scale: { x: 1, y: 1 },
+		shift: { x: 0, y: 0 },
 	};
 
 	return {
 		at: (x: number, y: number) => {
-			prop.pos = {x, y};
+			prop.pos = { x, y };
+			return polygon(ctx, prop, identity);
+		},
+		regular: (sides: number, size: number) => {
+			const division = Array(sides).fill(0).map((_, i) => ((2 * Math.PI) / sides) * i);
+			const verts = division.map(r => ({
+				x: Math.cos(r) * size,
+				y: Math.sin(r) * size,
+			}));
+			prop.vertices = verts;
 			return polygon(ctx, prop, identity);
 		},
 		rotated: (angle: number) => {
@@ -68,13 +76,13 @@ export const polygon = (
 			return polygon(ctx, prop, identity);
 		},
 		border: (n: number, color?: string) => {
-			prop.border = n;
+			prop.lineWidth = n;
 			if (color) {
 				prop.strokeColor = color;
 			}
 			return polygon(ctx, prop, identity);
 		},
-		vertices: (verts: Array<{x: number; y: number}>) => {
+		vertices: (verts: Array<{ x: number; y: number }>) => {
 			prop.vertices = verts;
 			return polygon(ctx, prop, identity);
 		},
@@ -88,7 +96,7 @@ export const polygon = (
 				ctx.translate(prop.pos.x, prop.pos.y); // translated
 				ctx.rotate(prop.rot * Math.PI / 180); // rotation about the origin
 				ctx.translate(-prop.shift.x, -prop.shift.y); // origin/axis
-				ctx.scale(prop.scale.x,	prop.scale.y);
+				ctx.scale(prop.scale.x, prop.scale.y);
 
 
 				ctx.beginPath();
@@ -102,7 +110,7 @@ export const polygon = (
 					ctx.fillStyle = prop.fillColor;
 					ctx.fill();
 				}
-				if (prop.border > 0) {
+				if (prop.lineWidth > 0) {
 					ctx.stroke();
 				}
 

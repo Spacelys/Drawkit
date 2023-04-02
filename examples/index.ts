@@ -63,7 +63,7 @@ const drawSprite = async () => {
 const drawTileset = async () => {
 	try {
 		const image = await loadImage(require('./assets/tileset.png'));
-		for(let i = 0; i < 32; i++) {
+		for (let i = 0; i < 32; i++) {
 			// render first 32 tiles
 			ctx.draw(image).tileset().tileSize(16, 16).scaled(2, 2).render(i, i * 32, 0);
 		}
@@ -71,6 +71,15 @@ const drawTileset = async () => {
 		console.log('Error', err);
 	}
 };
+
+// Regular Poplygon
+ctx.primitive().polygon()
+	.regular(6, 50)
+	.at(300, 100)
+	.rotated(60)
+	.border(3, 'green')
+	.filled(true)
+	.color('blue').render();
 
 drawSprite();
 drawTileset();
